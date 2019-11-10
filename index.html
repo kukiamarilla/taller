@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Control de Trabajos del Taller | TLG S.A.</title>
+    <link
+      rel="stylesheet"
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+    />
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="node_modules/vue/dist/vue.min.js"></script>
+    <script src="node_modules/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="table table-responsive table-dark">
+        <table>
+          <tr>
+            <th>Transacción</th>
+            <th>Camión</th>
+            <th>Trabajo</th>
+            <th>Sector</th>
+            <th>Mecánico</th>
+            <th>Para Finalizar</th>
+            <th>Acciones</th>
+          </tr>
+          <template v-for="fila in tabla">
+            <tr
+              v-if="fila.transaccion != null"
+              :class="fila.fechahoraini == null ? 'bg-warning' : fila.diferencia.mora ? 'bg-danger' : 'bg-success'"
+              :style="fila.fechahoraini != null ? 'color: #fff': ''"
+            >
+              <td>{{ fila.transaccion }}</td>
+              <td>{{ fila.camion }}</td>
+              <td>{{ fila.trabajo }}</td>
+              <td>{{ fila.familia }}</td>
+              <td>{{ fila.mecanico }}</td>
+              <td>
+                {{ fila.diferencia.dias }}d {{ fila.diferencia.horas }}h
+                {{ fila.diferencia.minutos }}m
+              </td>
+              <td>
+                <button
+                  class="btn btn-danger"
+                  v-if="fila.fechahoraini != null && fila.diferencia.mora"
+                  @click="finalizar(fila.transaccion, fila.id_trabajo)"
+                >
+                  Finalizar
+                </button>
+                <button
+                  class="btn btn-success"
+                  v-if="fila.fechahoraini != null && !fila.diferencia.mora"
+                  @click="finalizar(fila.transaccion, fila.id_trabajo)"
+                >
+                  Finalizar
+                </button>
+				<!--//v-if="fila.fechahoraini == null"-->				
+                <button
+                  class="btn btn-warning"
+				  v-if="fila.fechahoraini == null"
+                  @click="empezar(fila.transaccion, fila.id_trabajo)"
+                >
+                  Empezar
+                </button>
+              </td>
+            </tr>
+          </template>
+        </table>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
